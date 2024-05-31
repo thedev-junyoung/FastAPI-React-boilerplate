@@ -90,7 +90,7 @@
 
 1. **백엔드 의존성 설치**
 ```bash
-cd backend pip install -r requirements.txt
+cd backend && python3.9 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
 ```
 2. **Docker 컨테이너 실행**
 ```bash
