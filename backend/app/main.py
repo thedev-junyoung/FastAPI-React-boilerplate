@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.routers import router as api_v1_router
 from app.db.session import create_tables  # 올바르게 임포트
 from app.core.config import settings
+from contextlib import asynccontextmanager
+from app.db.session import engine
+from app.db.base import Base
 
 app = FastAPI()
 
@@ -15,6 +18,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Lifespan 이벤트 핸들러 정의
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 애플리케이션 시작 시 테이블 생성
+    Base.metadata.create_all(bind=engine)
+    yield
+    # 종료 시 수행할 작업이 있으면 여기에 추가
+
+
+
 
 # 데이터베이스 테이블 생성
 create_tables()
